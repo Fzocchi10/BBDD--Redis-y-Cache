@@ -3,6 +3,7 @@ package aeropuerto_api.tp.entity;
 import java.io.Serializable;
 import java.util.UUID;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Version;
@@ -20,7 +21,8 @@ public class Aeropuerto implements Serializable {
     private String pais;
 
     @Version
-    private Long version;
+    @Column(name = "version")
+    private int version;
 
 	public UUID getId() {
 		return id;

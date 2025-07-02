@@ -22,34 +22,6 @@ CREATE TABLE avion (
     total_de_asientos INT
 );
 
--- Tabla Vuelos
-CREATE TABLE vuelos (
-    id UUID PRIMARY KEY,
-    avion_id UUID REFERENCES avion(id),
-    aeropuerto_salida_id UUID REFERENCES aeropuerto(id),
-    hora_salida INT,
-    aeropuerto_llegada_id UUID REFERENCES aeropuerto(id),
-    hora_llegada INT
-);
-
--- Tabla Escalas
-CREATE TABLE escalas (
-    vuelo_id UUID,
-    num_escala INT,
-    aeropuerto_id UUID REFERENCES aeropuerto(id),
-    hora_llegada INT,
-    hora_partida INT,
-    PRIMARY KEY (vuelo_id, num_escala),
-    FOREIGN KEY (vuelo_id) REFERENCES vuelos(id)
-);
-
--- Tabla PuedeAterrizar
-CREATE TABLE puede_aterrizar (
-    tipo_avion_id UUID REFERENCES tipo_de_avion(id),
-    aeropuerto_id UUID REFERENCES aeropuerto(id),
-    PRIMARY KEY (tipo_avion_id, aeropuerto_id)
-);
-
 
 INSERT INTO Aeropuerto (id,nombre, ciudad, pais) VALUES
 ('d8793998-6abc-4cb7-9931-a25bc4cc3d9f','Aeropuerto Internacional Maiquetía', 'Caracas', 'Venezuela'),
@@ -254,52 +226,3 @@ INSERT INTO Avion (id,tipo_avion_id , total_de_asientos) VALUES
 ('02cfbca2-e008-482d-8fcb-aa661f9fb5b4', '6037b214-30be-4705-af37-666952c11ff9', 244),
 ('ce0c599a-4ccc-4aa1-9779-ea6916030a75', '6037b214-30be-4705-af37-666952c11ff9', 244);
 
-
-
-INSERT INTO puede_aterrizar (tipo_avion_id , aeropuerto_id) VALUES
-('d82e7cd9-dc9f-4551-bf14-ccdef997f9a9', 'd8793998-6abc-4cb7-9931-a25bc4cc3d9f'),
-('d82e7cd9-dc9f-4551-bf14-ccdef997f9a9', '82372d14-678c-4886-bd59-45ccc7a8b874'), 
-('d82e7cd9-dc9f-4551-bf14-ccdef997f9a9', '71e802dc-541e-450f-ba32-95c79b9f30d1'), 
-('6b282551-29b4-44e6-8d86-3661ebd10db2', '71e802dc-541e-450f-ba32-95c79b9f30d1'), 
-('6b282551-29b4-44e6-8d86-3661ebd10db2', '0591ac19-fe19-4168-a65d-e5295e4d51e8'), 
-('4eb07e90-34c8-4a08-b104-52827bf60032', 'ff7a34a1-2040-453c-a682-27e1659f3a04'),
-('94ad033d-d8e7-43df-8340-b10d0d78916d', '5e33084d-74d5-47f7-a266-cc82c20a9399'), 
-('155aa4ca-1057-4abb-be19-0907629b5a92', 'd8793998-6abc-4cb7-9931-a25bc4cc3d9f'), 
-('155aa4ca-1057-4abb-be19-0907629b5a92', '82372d14-678c-4886-bd59-45ccc7a8b874'), 
-('6037b214-30be-4705-af37-666952c11ff9', '0591ac19-fe19-4168-a65d-e5295e4d51e8'), 
-('6037b214-30be-4705-af37-666952c11ff9', '82372d14-678c-4886-bd59-45ccc7a8b874'); 
-
-
-INSERT INTO vuelos (id, avion_id , aeropuerto_salida_id , hora_salida , aeropuerto_llegada_id , hora_llegada) values
-('5f146094-659b-4be9-8e64-5bc55c82bc7f', '37e064e2-643f-47a0-80b4-84564dc399a0', '247126b1-73c2-4232-b557-17ce9778c486', 1125, '82372d14-678c-4886-bd59-45ccc7a8b874', 1238),
-('44e9a7df-393c-4b4f-9c46-e2afcea63d38', '6dc8fe5b-9d39-49ec-af0f-dc00b9e51c6c', '95a81ebc-05a3-47b2-a640-791549dbe32e', 694, 'da1435af-5191-49bd-aff4-3ac1941f0dff', 931),
-('b4aa6ae9-97e1-4b2c-b84f-c68b1381afc9', '37e064e2-643f-47a0-80b4-84564dc399a0', '71e802dc-541e-450f-ba32-95c79b9f30d1', 748, '23c64648-b435-4c68-9770-3378ea104ef1', 842),
-('b74b7240-f6cd-486b-a8a0-84c17f24ebe2', '6dc8fe5b-9d39-49ec-af0f-dc00b9e51c6c', 'd8793998-6abc-4cb7-9931-a25bc4cc3d9f', 1708, 'ecb2b2bd-a3f4-480e-97ad-11c6beddfd43', 1946),
-('69902238-7a00-4aaa-a90b-ad9c2e200372', '37e064e2-643f-47a0-80b4-84564dc399a0', 'fa5c95d3-e180-44ff-b697-65829f09da66', 2184, '1ed80c2e-f0c3-4086-bb45-c95b2acdb777', 2270),
-('cc1fabd7-9323-47dd-98be-1b9b7511d97f', '6dc8fe5b-9d39-49ec-af0f-dc00b9e51c6c', '6e32d5a1-4494-477b-820e-57aea75c2111', 719, '148ff1e7-8a9b-4122-82b2-ac25e60c5fd6', 886),
-('cb56747e-f6c4-4518-9989-7cc4dcb1c440', '8fd495f6-5599-42cb-930e-9cda5dc6eb8d', '71e802dc-541e-450f-ba32-95c79b9f30d1', 2213, 'b54b10f5-0b8e-4b87-aa77-0ce05d0e0531', 2675),
-('fcff1fae-8363-470a-9ea2-d60db9291664', '8fd495f6-5599-42cb-930e-9cda5dc6eb8d', '95a81ebc-05a3-47b2-a640-791549dbe32e', 22, '1fec94ff-2a1e-4185-9ceb-7a2f35e6b6c8', 320),
-('3c2909c7-c8f2-4b33-9c8f-7405d0cd092f', 'a7073f54-5311-4b58-bdae-97509b0da99b', 'ecb2b2bd-a3f4-480e-97ad-11c6beddfd43', 2331, '1ed80c2e-f0c3-4086-bb45-c95b2acdb777', 2590),
-('57355550-2fd9-4359-a9ef-3e8315971d0b', '8fd495f6-5599-42cb-930e-9cda5dc6eb8d', 'b54b10f5-0b8e-4b87-aa77-0ce05d0e0531', 2151, '148ff1e7-8a9b-4122-82b2-ac25e60c5fd6', 2368),
-('0298a634-009f-41da-af44-8656634e265f', 'a7073f54-5311-4b58-bdae-97509b0da99b', '23c64648-b435-4c68-9770-3378ea104ef1', 563, 'd9159f7e-fee6-4240-b336-7cbfe36f1548', 786),
-('3183dad3-dfb7-48b1-a808-1315995e235d', '8fd495f6-5599-42cb-930e-9cda5dc6eb8d', 'ecb2b2bd-a3f4-480e-97ad-11c6beddfd43', 850, '3180d859-a87f-4131-9c16-17ec21f2881c', 1096),
-('fabfefd4-83a7-49b1-bf5c-2d2b7f1f17f5', '3a246a3d-4e44-431e-a6f1-db096b61dc09', '95a81ebc-05a3-47b2-a640-791549dbe32e', 214, 'd8793998-6abc-4cb7-9931-a25bc4cc3d9f', 618),
-('eeae4ec9-794a-4f0a-8e6c-3aa19a427440', 'df710725-5ddb-4c4f-94a3-f9969b96fee9', '82372d14-678c-4886-bd59-45ccc7a8b874', 367, '1fec94ff-2a1e-4185-9ceb-7a2f35e6b6c8', 734),
-('058b8e07-ffa6-4211-bbfb-bc22bdd175f7', '3a246a3d-4e44-431e-a6f1-db096b61dc09', '1fec94ff-2a1e-4185-9ceb-7a2f35e6b6c8', 85, '28fe62b4-de32-4272-87a9-33a804ec1226', 446),
-('6a389d92-83ed-4c23-8231-9cc05c677f5a', 'df710725-5ddb-4c4f-94a3-f9969b96fee9', 'ecb2b2bd-a3f4-480e-97ad-11c6beddfd43', 1000, 'a8d3d103-f60d-4970-94f2-0e171c7a06ad', 1115),
-('fe6f7427-7815-4ed2-97b4-5f7fd4be61a9', '3a246a3d-4e44-431e-a6f1-db096b61dc09', 'b54b10f5-0b8e-4b87-aa77-0ce05d0e0531', 1234, '23c64648-b435-4c68-9770-3378ea104ef1', 1351),
-('1c827295-41da-4c47-b845-e2226f0c2c42', 'df710725-5ddb-4c4f-94a3-f9969b96fee9', '148ff1e7-8a9b-4122-82b2-ac25e60c5fd6', 1050, '82372d14-678c-4886-bd59-45ccc7a8b874', 1331),
-('f147efb0-8ed3-4153-bfed-a2f904bfd4c7', 'e5d90ef3-0c16-4d7c-9db4-4bbcca1254e5', 'b2352e52-3eff-4165-a703-a650d4ef8801', 2336, '0591ac19-fe19-4168-a65d-e5295e4d51e8', 2444),
-('bb8cc4f3-fc03-4b76-9e97-3173fcdb0e7c', 'e5d90ef3-0c16-4d7c-9db4-4bbcca1254e5', '23c64648-b435-4c68-9770-3378ea104ef1', 2332, '006be0e3-805b-4ffc-967b-f9b7d4d19124', 2617);
-
-
-INSERT INTO escalas  (vuelo_id , num_escala , aeropuerto_id , hora_llegada , hora_partida) VALUES
-('b4aa6ae9-97e1-4b2c-b84f-c68b1381afc9', 1, '5e33084d-74d5-47f7-a266-cc82c20a9399', 1030, 1130), 
-('b4aa6ae9-97e1-4b2c-b84f-c68b1381afc9', 2, '71647d17-0b1c-47f8-9dbc-8096f43d81a0', 1410, 1510), 
-('b4aa6ae9-97e1-4b2c-b84f-c68b1381afc9', 3, '5e33084d-74d5-47f7-a266-cc82c20a9399', 1930, 2210), 
-('bb8cc4f3-fc03-4b76-9e97-3173fcdb0e7c', 1, '71647d17-0b1c-47f8-9dbc-8096f43d81a0', 930, 1015),
-('bb8cc4f3-fc03-4b76-9e97-3173fcdb0e7c', 2, '006be0e3-805b-4ffc-967b-f9b7d4d19124', 1245, 1340), 
-('f147efb0-8ed3-4153-bfed-a2f904bfd4c7', 1, '006be0e3-805b-4ffc-967b-f9b7d4d19124', 1230, 1330), 
-('eeae4ec9-794a-4f0a-8e6c-3aa19a427440', 1, '1ed80c2e-f0c3-4086-bb45-c95b2acdb777', 1000, 1100), 
-('eeae4ec9-794a-4f0a-8e6c-3aa19a427440', 2, 'ff7a34a1-2040-453c-a682-27e1659f3a04', 1345, 1430), 
-('69902238-7a00-4aaa-a90b-ad9c2e200372', 1, '1ed80c2e-f0c3-4086-bb45-c95b2acdb777', 1100, 1200);

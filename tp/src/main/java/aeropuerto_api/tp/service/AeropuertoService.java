@@ -7,9 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import aeropuerto_api.tp.entity.Aeropuerto;
 import aeropuerto_api.tp.repository.AeropuertoRepository;
+import jakarta.persistence.OptimisticLockException;
+
 
 
 @Service
@@ -29,17 +32,24 @@ public class AeropuertoService {
 		return this.aeropuertoRepository.findById(id).get(); 
 	}
 
-    @CachePut(value="aeropuertosStore", key="#result.id")
+	@Transactional
+    @CachePut(value = "aeropuertosStore", key = "#result.id")
     public Aeropuerto updateAeropuerto(Aeropuerto nuevoAeropuerto) {
         Aeropuerto viejoAeropuerto = this.aeropuertoRepository.findById(nuevoAeropuerto.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Este id no existe: " + nuevoAeropuerto.getId()));
+
         viejoAeropuerto.setNombre(nuevoAeropuerto.getNombre());
         viejoAeropuerto.setCiudad(nuevoAeropuerto.getCiudad());
         viejoAeropuerto.setPais(nuevoAeropuerto.getPais());
-        Aeropuerto updatedAeropuerto = aeropuertoRepository.save(viejoAeropuerto);
-        return updatedAeropuerto;
+
+        try {
+            return aeropuertoRepository.save(viejoAeropuerto);
+        } catch (OptimisticLockException e) {
+            throw new RuntimeException("Error de concurrencia: El aeropuerto fue modificado por otro proceso.", e);
+        }
     }
     
+    @Transactional
     public Aeropuerto crear(Aeropuerto aeropuerto) {
     	return this.aeropuertoRepository.save(aeropuerto);
     }
